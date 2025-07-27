@@ -8,18 +8,21 @@ var express = require('express')
 
 function route_get_block(res, blockhash) {
   lib.get_block(blockhash, function (block) {
+    var block_type = 'PoW';
+    if (block && block.flags && block.flags.toLowerCase().includes('proof-of-stake'))
+      block_type = 'PoS';
     if (block != 'There was an error. Check your console.') {
       if (blockhash == settings.genesis_block) {
-        res.render('block', { active: 'block', block: block, confirmations: settings.confirmations, txs: 'GENESIS'});
+        res.render('block', { active: 'block', block: block, confirmations: settings.confirmations, txs: 'GENESIS', block_type: block_type});
       } else {
         db.get_txs(block, function(txs) {
           if (txs.length > 0) {
-            res.render('block', { active: 'block', block: block, confirmations: settings.confirmations, txs: txs});
+            res.render('block', { active: 'block', block: block, confirmations: settings.confirmations, txs: txs, block_type: block_type});
           } else {
             db.create_txs(block, function(){
               db.get_txs(block, function(ntxs) {
                 if (ntxs.length > 0) {
-                  res.render('block', { active: 'block', block: block, confirmations: settings.confirmations, txs: ntxs});
+                  res.render('block', { active: 'block', block: block, confirmations: settings.confirmations, txs: ntxs, block_type: block_type});
                 } else {
                   route_get_index(res, 'Block not found: ' + blockhash);
                 }
