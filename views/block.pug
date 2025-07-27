@@ -24,6 +24,7 @@ block content
             th #{settings.locale.height}
             th #{settings.locale.difficulty}
             th #{settings.locale.confirmations}
+            th #{settings.locale.block_type}
             if settings.heavy == true
               th Vote
             th.d-none.d-sm-table-cell.d-table-cell #{settings.locale.size} (kB)
@@ -37,6 +38,7 @@ block content
               td=block.height
               td=Number(block.difficulty).toFixed(4)
               td=block.confirmations
+              td=block_type
               if settings.heavy == true
                 td=block.vote
               td.d-none.d-sm-table-cell.d-table-cell=block_size.toFixed(2)
@@ -50,6 +52,7 @@ block content
                 td=block.height
                 td=Number(block.difficulty).toFixed(4)
                 td=block.confirmations
+                td=block_type
                 if settings.heavy == true
                   td=block.vote
                 td.d-none.d-sm-table-cell.d-table-cell=block_size.toFixed(2)
@@ -62,6 +65,7 @@ block content
                 td=block.height
                 td=Number(block.difficulty).toFixed(4)
                 td=block.confirmations
+                td=block_type
                 if settings.heavy == true
                   td=block.vote
                 td.d-none.d-sm-cell.d-table-cell=block_size.toFixed(2)

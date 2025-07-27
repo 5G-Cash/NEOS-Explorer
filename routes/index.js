@@ -9,17 +9,20 @@ var express = require('express')
 function route_get_block(res, blockhash) {
   lib.get_block(blockhash, function (block) {
     if (block != 'There was an error. Check your console.') {
+      var block_type = 'PoW';
+      if (block.flags && block.flags.indexOf('proof-of-stake') > -1)
+        block_type = 'PoS';
       if (blockhash == settings.genesis_block) {
-        res.render('block', { active: 'block', block: block, confirmations: settings.confirmations, txs: 'GENESIS'});
+        res.render('block', { active: 'block', block: block, block_type: block_type, confirmations: settings.confirmations, txs: 'GENESIS'});
       } else {
         db.get_txs(block, function(txs) {
           if (txs.length > 0) {
-            res.render('block', { active: 'block', block: block, confirmations: settings.confirmations, txs: txs});
+            res.render('block', { active: 'block', block: block, block_type: block_type, confirmations: settings.confirmations, txs: txs});
           } else {
             db.create_txs(block, function(){
               db.get_txs(block, function(ntxs) {
                 if (ntxs.length > 0) {
-                  res.render('block', { active: 'block', block: block, confirmations: settings.confirmations, txs: ntxs});
+                  res.render('block', { active: 'block', block: block, block_type: block_type, confirmations: settings.confirmations, txs: ntxs});
                 } else {
                   route_get_index(res, 'Block not found: ' + blockhash);
                 }

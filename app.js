@@ -226,17 +226,27 @@ app.use('/ext/getlasttxsajax/:min', function(req,res){
   }
   db.get_last_txs_ajax(req.query.start, req.query.length, req.params.min,function(txs, count){
     var data = [];
-    for(i=0; i<txs.length; i++){
-      var row = [];
-      row.push(txs[i].blockindex);
-      row.push(txs[i].blockhash);
-      row.push(txs[i].txid);
-      row.push(txs[i].vout.length);
-      row.push((txs[i].total));
-      row.push(new Date((txs[i].timestamp) * 1000).toUTCString());
-      data.push(row);
-    }
-    res.json({"data":data, "draw": req.query.draw, "recordsTotal": count, "recordsFiltered": count});
+    lib.syncLoop(txs.length, function(loop){
+      var i = loop.iteration();
+      var tx = txs[i];
+      lib.get_block(tx.blockhash, function(block){
+        var block_type = 'PoW';
+        if (block && block.flags && block.flags.indexOf('proof-of-stake') > -1)
+          block_type = 'PoS';
+        var row = [];
+        row.push(tx.blockindex);
+        row.push(tx.blockhash);
+        row.push(tx.txid);
+        row.push(tx.vout.length);
+        row.push((tx.total));
+        row.push(new Date((tx.timestamp) * 1000).toUTCString());
+        row.push(block_type);
+        data.push(row);
+        loop.next();
+      });
+    }, function(){
+      res.json({"data":data, "draw": req.query.draw, "recordsTotal": count, "recordsFiltered": count});
+    });
   });
 });
 
