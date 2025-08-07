@@ -233,6 +233,7 @@ app.use('/ext/getlasttxsajax/:min', function(req,res){
       row.push(txs[i].txid);
       row.push(txs[i].vout.length);
       row.push((txs[i].total));
+      row.push(txs[i].blocktype);
       row.push(new Date((txs[i].timestamp) * 1000).toUTCString());
       data.push(row);
     }

@@ -35,6 +35,7 @@
     "tx_hash": "Hash",
     "tx_address": "Address",
     "tx_nonstandard": "NONSTANDARD TX",
+    "tx_type": "Type",
 
     // block view
     "block_previous": "Previous",
