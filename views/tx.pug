@@ -68,9 +68,9 @@ block content
               tbody
                 if tx.vin.length > 0
                   each r in tx.vin
-                    if r.addresses == 'coinbase' 
+                    if r.addresses == 'coinbase'
                       tr.table-info(style='text-align:center')
-                        td #{settings.locale.new_coins}
+                        td #{settings.locale.proof_of_work}
                     else
                       - var ramount = (r.amount / 100000000).toLocaleString('en',{'minimumFractionDigits':2,'maximumFractionDigits':8,'useGrouping':true})
                       - var ramountParts = ramount.split('.')
