@@ -57,7 +57,6 @@
     "total": "Total",
     "bits": "Bits",
     "nonce": "Nonce",
-    "new_coins": "New Coins",
     "proof_of_stake": "PoS",
     "proof_of_work": "PoW",
     "initial_index_alert": "Indexing is currently incomplete, functionality is limited until index is up-to-date.",
