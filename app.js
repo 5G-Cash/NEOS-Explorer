@@ -233,8 +233,8 @@ app.use('/ext/getlasttxsajax/:min', function(req,res){
       row.push(txs[i].txid);
       row.push(txs[i].vout.length);
       row.push((txs[i].total));
+      row.push(txs[i].timestamp ? new Date(txs[i].timestamp * 1000).toUTCString() : 'Unknown');
       row.push(txs[i].blocktype || 'Unknown');
-      row.push(new Date((txs[i].timestamp) * 1000).toUTCString());
       data.push(row);
     }
     res.json({"data":data, "draw": req.query.draw, "recordsTotal": count, "recordsFiltered": count});
